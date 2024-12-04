@@ -1,4 +1,4 @@
-module filter-gorm
+module github.com/R3n3r0/filter-gorm
 
 go 1.23
 
