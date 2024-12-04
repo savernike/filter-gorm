@@ -1,11 +1,11 @@
 package main
 
 import (
-	"filter-gorm/example/models"
-	"filter-gorm/example/models/filter"
-	"filter-gorm/example/repository"
-	"filter-gorm/filter_helper"
 	"fmt"
+	"github.com/R3n3r0/filter-gorm/example/models"
+	"github.com/R3n3r0/filter-gorm/example/models/filter"
+	"github.com/R3n3r0/filter-gorm/example/repository"
+	"github.com/R3n3r0/filter-gorm/filter_helper"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -106,11 +106,11 @@ func main() {
 		panic(err)
 	}
 	printUsers(getUsers)
-
+	fmt.Println("END FILTER FOR GROUP RELATED")
 	groupFilter3 := filter.GroupFilter{
 		Permission: "audio",
 	}
-	getGroups, err := groupRepository.GetGroups(groupFilter3)
+	getGroups, err := groupRepository.GetGroups(&groupFilter3)
 	if err != nil {
 		panic(err)
 	}

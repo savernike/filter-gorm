@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"filter-gorm/example/models"
-	"filter-gorm/example/models/filter"
-	"filter-gorm/filter_helper"
+	"github.com/R3n3r0/filter-gorm/example/models"
+	"github.com/R3n3r0/filter-gorm/example/models/filter"
+	"github.com/R3n3r0/filter-gorm/filter_helper"
 	"gorm.io/gorm"
 )
 

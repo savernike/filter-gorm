@@ -334,8 +334,25 @@ func (f *FilterService) GetTableNameFromRelationField(model interface{}, fieldNa
 	}
 	return "", errors.New("not relation in this field")
 }
+func (f *FilterService) toStruct(val interface{}) interface{} {
+	v := reflect.ValueOf(val)
 
+	// Controlla se è un puntatore
+	if v.Kind() == reflect.Ptr {
+		// Dereferenzia il puntatore per ottenere il valore effettivo
+		v = reflect.Indirect(v)
+	}
+
+	// Verifica che sia una struct
+	if v.Kind() == reflect.Struct {
+		return v.Interface()
+	}
+
+	// Ritorna nil o un errore se non è una struct
+	return nil
+}
 func (f *FilterService) CreateFilter(filter interface{}, model interface{}) *gorm.DB {
+	filter = f.toStruct(filter)
 	filterType := reflect.TypeOf(filter)
 	filterValue := reflect.ValueOf(filter)
 	query := f.db.Model(&model)

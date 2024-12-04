@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"filter-gorm/example/models"
-	"filter-gorm/example/models/filter"
+	"github.com/R3n3r0/filter-gorm/example/models"
+	"github.com/R3n3r0/filter-gorm/example/models/filter"
 )
 
 type UserRepository interface {
