@@ -3,6 +3,7 @@ package filter
 import "time"
 
 type GroupFilter struct {
+	ID         uint       `json:"id" filter:"1"`
 	Name       string     `json:"name" filter:"1" searchable:"1"`
 	CreatedAt  *time.Time `json:"created_at" filter:"2"` // Filtro per la data di creazione
 	UpdatedAt  *time.Time `json:"updated_at" filter:"2"` // Filtro per la data di aggiornamento

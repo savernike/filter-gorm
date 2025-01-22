@@ -171,8 +171,10 @@ func (f *FilterService) getQueryForRelation(query *gorm.DB, filterType FilterTyp
 
 	return query
 }
-func (f *FilterService) getQuery(filterType FilterType, fieldName string, value interface{}, query *gorm.DB) *gorm.DB {
+func (f *FilterService) getQuery(filterType FilterType, fieldName string, value interface{}, query *gorm.DB,
+	tableName string) *gorm.DB {
 	columnName := f.db.NamingStrategy.ColumnName("", fieldName)
+	columnName = fmt.Sprintf("%s.%s", tableName, columnName)
 	switch filterType {
 	case LIKE:
 		query = query.Where(columnName+" LIKE ?", "%"+value.(string)+"%")
@@ -390,7 +392,7 @@ func (f *FilterService) CreateFilter(filter interface{}, model interface{}) *gor
 				query = f.getQueryForRelation(query, filterTypeMap[filterTypeTag], filterFieldTag, relatedTableName, fieldValue, many2manyTableName, primaryTableName)
 			} else {
 				if filterTypeMap[filterTypeTag] != SORTED && filterTypeMap[filterTypeTag] != SORTEDBY && filterTypeTag != "" {
-					query = f.getQuery(filterTypeMap[filterTypeTag], field.Name, fieldValue, query)
+					query = f.getQuery(filterTypeMap[filterTypeTag], field.Name, fieldValue, query, primaryTableName)
 				}
 			}
 		}

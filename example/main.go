@@ -108,7 +108,7 @@ func main() {
 	printUsers(getUsers)
 	fmt.Println("END FILTER FOR GROUP RELATED")
 	groupFilter3 := filter.GroupFilter{
-		Permission: "audio",
+		ID: 1,
 	}
 	getGroups, err := groupRepository.GetGroups(&groupFilter3)
 	if err != nil {
