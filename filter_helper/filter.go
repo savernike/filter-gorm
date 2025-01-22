@@ -80,6 +80,9 @@ func (f *FilterService) GetTypeField(t interface{}, name string) reflect.Kind {
 func (f *FilterService) GetTagFromModelField(t interface{}, name string, nameTag string) string {
 	// Otteniamo il tipo di valore riflessivo per la struttura
 	tagType := reflect.TypeOf(t)
+	if tagType.Kind() == reflect.Ptr {
+		tagType = tagType.Elem()
+	}
 	// Iteriamo attraverso i campi della struttura
 	for i := 0; i < tagType.NumField(); i++ {
 
@@ -315,6 +318,9 @@ func (f *FilterService) extractMany2ManyTable(tag string) string {
 
 func (f *FilterService) GetTableNameFromRelationField(model interface{}, fieldName string) (string, error) {
 	modelType := reflect.TypeOf(model)
+	if modelType.Kind() == reflect.Ptr {
+		modelType = modelType.Elem()
+	}
 	for i := 0; i < modelType.NumField(); i++ {
 		field := modelType.Field(i)
 		if field.Name == fieldName {

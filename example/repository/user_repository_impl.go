@@ -18,7 +18,7 @@ func (u UserRepositoryImpl) CreateUser(user *models.User) error {
 }
 
 func (u UserRepositoryImpl) GetUsers(filter filter.UserFilter) ([]models.User, error) {
-	query := u.filterService.CreateFilter(filter, models.User{})
+	query := u.filterService.CreateFilter(filter, &models.User{})
 	var us []models.User
 	err := query.Preload("Groups").Find(&us).Error
 	if err != nil {
