@@ -289,6 +289,12 @@ func (f *FilterService) checkEmpty(value interface{}, typology reflect.Kind) boo
 			if v.Len() == 0 {
 				result = true
 			}
+		} else {
+			if v.Kind() == reflect.Slice {
+				if v.Len() == 0 || v.IsNil() {
+					result = true
+				}
+			}
 		}
 		break
 
