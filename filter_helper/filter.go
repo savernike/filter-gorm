@@ -133,37 +133,37 @@ func (f *FilterService) getQueryForRelation(query *gorm.DB, filterType FilterTyp
 	//TODO verificare se già esistono le tabelle in join, se esistono aggiungere semplicemente la where
 	if many2manyTableName != "" {
 		// join with intermediate table, importat the key is a standard name table_id
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s=%s", many2manyTableName,
-			fmt.Sprintf("%s.%s", many2manyTableName, fmt.Sprintf("%s_id", primaryTableName[:len(primaryTableName)-1])),
-			fmt.Sprintf("%s.%s", primaryTableName, "id")))
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON %s=%s", many2manyTableName,
+			fmt.Sprintf("`%s`.%s", many2manyTableName, fmt.Sprintf("%s_id", primaryTableName[:len(primaryTableName)-1])),
+			fmt.Sprintf("`%s`.%s", primaryTableName, "id")))
 		primaryTableName = many2manyTableName
 	}
 
 	switch filterType {
 	case LIKE:
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s.%s=%s.%s", relatedTableName, relatedTableName, "id",
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON `%s`.%s=`%s`.%s", relatedTableName, relatedTableName, "id",
 			primaryTableName, fmt.Sprintf("%s_id", relatedTableName[:len(relatedTableName)-1]))).
-			Where(fmt.Sprintf("%s.%s LIKE ?", relatedTableName, columnName), "%"+value.(string)+"%")
+			Where(fmt.Sprintf("`%s`.%s LIKE ?", relatedTableName, columnName), "%"+value.(string)+"%")
 		break
 	case EXACT:
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s.%s=%s.%s", relatedTableName, relatedTableName, "id",
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON `%s`.%s=`%s`.%s", relatedTableName, relatedTableName, "id",
 			primaryTableName, fmt.Sprintf("%s_id", relatedTableName[:len(relatedTableName)-1]))).
-			Where(fmt.Sprintf("%s.%s = ?", relatedTableName, columnName), value)
+			Where(fmt.Sprintf("`%s`.%s = ?", relatedTableName, columnName), value)
 		break
 	case GT:
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s.%s=%s.%s", relatedTableName, relatedTableName, "id",
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON `%s`.%s=`%s`.%s", relatedTableName, relatedTableName, "id",
 			primaryTableName, fmt.Sprintf("%s_id", relatedTableName[:len(relatedTableName)-1]))).
-			Where(fmt.Sprintf("%s.%s >= ?", relatedTableName, columnName), value)
+			Where(fmt.Sprintf("`%s`.%s >= ?", relatedTableName, columnName), value)
 		break
 	case LT:
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s.%s=%s.%s", relatedTableName, relatedTableName, "id",
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON `%s`.%s=`%s`.%s", relatedTableName, relatedTableName, "id",
 			primaryTableName, fmt.Sprintf("%s_id", relatedTableName[:len(relatedTableName)-1]))).
-			Where(fmt.Sprintf("%s.%s <= ?", relatedTableName, columnName), value)
+			Where(fmt.Sprintf("`%s`.%s <= ?", relatedTableName, columnName), value)
 		break
 	case IN:
-		query = query.Joins(fmt.Sprintf("JOIN %s ON %s.%s=%s.%s", relatedTableName, relatedTableName, "id",
+		query = query.Joins(fmt.Sprintf("JOIN `%s` ON `%s`.%s=`%s`.%s", relatedTableName, relatedTableName, "id",
 			primaryTableName, fmt.Sprintf("%s_id", relatedTableName[:len(relatedTableName)-1]))).
-			Where(fmt.Sprintf("%s.%s IN (?)", relatedTableName, columnName), value)
+			Where(fmt.Sprintf("`%s`.%s IN (?)", relatedTableName, columnName), value)
 		break
 	default:
 		//panic("unhandled default case")
@@ -174,7 +174,7 @@ func (f *FilterService) getQueryForRelation(query *gorm.DB, filterType FilterTyp
 func (f *FilterService) getQuery(filterType FilterType, fieldName string, value interface{}, query *gorm.DB,
 	tableName string) *gorm.DB {
 	columnName := f.db.NamingStrategy.ColumnName("", fieldName)
-	columnName = fmt.Sprintf("%s.%s", tableName, columnName)
+	columnName = fmt.Sprintf("`%s`.%s", tableName, columnName)
 	switch filterType {
 	case LIKE:
 		query = query.Where(columnName+" LIKE ?", "%"+value.(string)+"%")
