@@ -365,7 +365,7 @@ func (f *FilterService) toStruct(val interface{}) interface{} {
 	// Ritorna nil o un errore se non è una struct
 	return nil
 }
-func (f *FilterService) CreateFilter(filter interface{}, model interface{}) *gorm.DB {
+func (f *FilterService) CreateFilterPagination(filter interface{}, model interface{}) (*gorm.DB, int, int) {
 	filter = f.toStruct(filter)
 	filterType := reflect.TypeOf(filter)
 	filterValue := reflect.ValueOf(filter)
@@ -462,6 +462,11 @@ func (f *FilterService) CreateFilter(filter interface{}, model interface{}) *gor
 	columnName := f.db.NamingStrategy.ColumnName("", sortBy)
 	query = query.Order(primaryTableName + "." + columnName + " " + sortOrder)
 
+	return query, page, size
+}
+
+func (f *FilterService) CreateFilter(filter interface{}, model interface{}) *gorm.DB {
+	query, _, _ := f.CreateFilterPagination(filter, model)
 	return query
 }
 
